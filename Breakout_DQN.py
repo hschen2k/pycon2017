@@ -17,7 +17,7 @@ if not os.path.exists('./save_model'):
 
 EPISODES = 2000
 RENDER = False
-MONITOR = False
+MONITOR = True
 
 
 class DQNAgent:
@@ -152,11 +152,12 @@ if __name__ == "__main__":
     # In case of BreakoutDeterministic-v3, always skip 4 frames
     env = gym.make('BreakoutDeterministic-v3')
     if MONITOR:
-        env = wrappers.Monitor(env, "./gym-results")
+        env = wrappers.Monitor(env, "./gym-results", force=True)
     # get size of action from environment
     action_size = env.action_space.n
     agent = DQNAgent(action_size)
-    agent.load_model('./save_model/Breakout_DQN.h5')
+    if os.path.exists('./save_model/Breakout_DQN.h5'):
+        agent.load_model('./save_model/Breakout_DQN.h5')
 
     scores, episodes, global_step = [], [], 0
     
@@ -202,7 +203,7 @@ if __name__ == "__main__":
 
             # save the sample <s, a, r, s'> to the replay memory
             agent.remember(history, action, reward, next_history, dead)
-            agent.train_replay()
+            #agent.train_replay()
             # update the target model with model
             if global_step % agent.update_target_rate == 0:
                 agent.update_target_model()
@@ -224,5 +225,6 @@ if __name__ == "__main__":
                 agent.avg_q_max, agent.avg_loss = 0, 0
 
         if e % 20 == 0:
-            agent.save_model("./save_model/Breakout_DQN.h5")
+            print("no save model")
+            #agent.save_model("./save_model/Breakout_DQN.h5")
 
