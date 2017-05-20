@@ -225,6 +225,5 @@ if __name__ == "__main__":
                 agent.avg_q_max, agent.avg_loss = 0, 0
 
         if e % 20 == 0:
-            print("no save model")
-            #agent.save_model("./save_model/Breakout_DQN.h5")
+            agent.save_model("./save_model/Breakout_DQN.h5")
 
